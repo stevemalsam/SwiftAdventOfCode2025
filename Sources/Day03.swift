@@ -17,6 +17,15 @@ struct Day03: AdventDay {
       String($0)
     }
   }
+  
+  var pt2entities: [[Int]] {
+    data.split(separator: "\n")
+      .map {
+        $0.map {
+          Int(String($0))!
+        }
+      }
+  }
 
   // Replace this with your solution for the first part of the day's challenge.
   func part1() -> Any {
@@ -51,7 +60,34 @@ struct Day03: AdventDay {
 
   // Replace this with your solution for the second part of the day's challenge.
   func part2() -> Any {
-    // Sum the maximum entries in each set of data
-    entities.first
+    var outputJoltage = 0
+    
+    for batteryBank in pt2entities {
+      var lastIndex = 0
+      var numberString = ""
+      
+      for i in (1 ... 12).reversed() {
+        let (character, index) = findLargestDigitWithAtLeastNDigitsRemaining(line: batteryBank, startIndex: lastIndex, charactersRemaining: i-1)
+        numberString += character
+        lastIndex = index + 1
+      }
+      
+      outputJoltage += Int(numberString)!
+    }
+    
+    return outputJoltage
+  }
+  
+  func findLargestDigitWithAtLeastNDigitsRemaining(line:[Int], startIndex: Int, charactersRemaining: Int) -> (String, Int) {
+    var largestDigit = 0
+    var index = startIndex
+    
+    for i in (startIndex ..< (line.endIndex - charactersRemaining)) {
+      if line[i] > largestDigit {
+        largestDigit = line[i]
+        index = i
+      }
+    }
+    return (String(largestDigit), index)
   }
 }
