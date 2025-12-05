@@ -91,7 +91,31 @@ struct Day04: AdventDay {
 
   // Replace this with your solution for the second part of the day's challenge.
   func part2() -> Any {
-    // Sum the maximum entries in each set of data
-    entities.first
+    var movableRolls = 0
+    var grid = entities
+    
+    while(true) {
+      var rollsToRemove = [(Int, Int)]()
+      for (yIndex, y) in grid.enumerated() {
+        for (xIndex, x) in grid[yIndex].enumerated() {
+          if x == "@" {
+            let surroundingRolls = checkSurroundingsInGrid(grid: grid, x: xIndex, y: yIndex)
+            if surroundingRolls < 4 {
+              rollsToRemove.append((xIndex, yIndex))
+            }
+          }
+        }
+      }
+      if(rollsToRemove.isEmpty) {
+        break
+      }
+      
+      movableRolls += rollsToRemove.count
+      for roll in rollsToRemove {
+        grid[roll.1][roll.0] = "."
+      }
+      
+    }
+    return movableRolls
   }
 }
